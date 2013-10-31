@@ -2,7 +2,7 @@ import Dependencies._
 
 organization := "com.gu"
 
-name := "dynamodbswitches"
+name := "dynamo-db-switches"
 
 version := "0.1"
 
