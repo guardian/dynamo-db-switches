@@ -11,7 +11,7 @@ trait Switches extends Logging {
   val all: List[Switch]
 
   val dynamoDbClient: AmazonDynamoDBClient
-  val dynamoDbTableName: String = "switches"
+  val dynamoDbTableName: String = "featureSwitches"
 
   val processor = DynamoDbResultProcessor(all)
 
