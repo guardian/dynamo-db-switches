@@ -6,4 +6,6 @@ object Dependencies {
   val amazonWebServicesSdk = "com.amazonaws" % "aws-java-sdk" % "1.6.3"
 
   val grizzled = "org.clapper" % "grizzled-slf4j_2.10" % "1.0.1"
+
+  val scalaCheck = "org.scalacheck" %% "scalacheck" % "1.10.1" % "test"
 }
