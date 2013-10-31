@@ -23,16 +23,14 @@ Set enabled to `1` to enable the feature switch, `0` to disable it.
 Define your switches in an object
 
 ```scala
-
 object ApplicationSwitches extends Switches {
   val dynamoDbClient = // define your dynamo DB client here
 
-  val someWonderfulFeatureSwitch = Switch("nameOfSwitch", default = false)
+  val mySwitch = Switch("nameOfSwitch", default = false)
 
   // make sure you put all switches in here or they won't update
-  val all = List(someWonderfulFeatureSwitch)
+  val all = List(mySwitch)
 }
-
 ```
 
 ### Updates
@@ -40,9 +38,7 @@ object ApplicationSwitches extends Switches {
 Use a scheduler to update the switches from Dynamo DB once per minute
 
 ```scala
-
 Akka.scheduler.schedule(1.minute, 1.minute) { ApplicationSwitches.update() }
-
 ```
 
 ### Testing switches
@@ -50,11 +46,9 @@ Akka.scheduler.schedule(1.minute, 1.minute) { ApplicationSwitches.update() }
 Use as follows:
 
 ```scala
-
-if (ApplicationSwitches.someWonderfulFeatureSwitch.enabled) {
+if (ApplicationSwitches.mySwitch.enabled) {
   // do something
 }
-
 ```
 
 ## Copyright
