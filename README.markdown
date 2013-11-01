@@ -38,7 +38,7 @@ object ApplicationSwitches extends Switches {
 Use a scheduler to update the switches from Dynamo DB once per minute
 
 ```scala
-Akka.scheduler.schedule(1.minute, 1.minute) { ApplicationSwitches.update() }
+Akka.scheduler.schedule(0.seconds, 1.minute) { ApplicationSwitches.update() }
 ```
 
 ### Testing switches
