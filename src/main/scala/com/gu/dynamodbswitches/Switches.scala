@@ -10,10 +10,10 @@ import com.amazonaws.AmazonServiceException
 trait Switches extends Logging {
   val all: List[Switch]
 
-  val dynamoDbClient: AmazonDynamoDBClient
+  def dynamoDbClient: AmazonDynamoDBClient
   val dynamoDbTableName: String = "featureSwitches"
 
-  val processor = DynamoDbResultProcessor(all)
+  lazy private val processor = DynamoDbResultProcessor(all)
 
   /** Use a scheduler to call this once per minute */
   def update(): Unit = {
@@ -39,12 +39,12 @@ trait Switches extends Logging {
 
 private [dynamodbswitches] case class ProcessingResults(updates: Set[(Switch, Boolean)], missing: Set[Switch])
 
-private [dynamodbswitches] case class DynamoDbResultProcessor(all: List[Switch]) {
+private [dynamodbswitches] case class DynamoDbResultProcessor(switches: List[Switch]) {
   val DynamoDbKeyName: String = "name"
   val DynamoDbValueName: String = "enabled"
 
-  private val byName = all.map(switch => switch.name -> switch).toMap
-  private val switchSet = all.toSet
+  private val byName = switches.map(switch => switch.name -> switch).toMap
+  private val switchSet = switches.toSet
 
   def process(updates: List[Map[String, AttributeValue]]) = {
     val switchesAndStates = (updates flatMap { attributeMap =>

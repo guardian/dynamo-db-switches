@@ -28,7 +28,7 @@ class DynamoDbResultProcessorSpec extends Properties("DynamoDbResultProcessor") 
   property("process") = forAll { (processor: DynamoDbResultProcessor) =>
     implicit val arbitraryDynamoDbSwitch = Arbitrary {
       for {
-        switch <- Gen.oneOf(processor.all)
+        switch <- Gen.oneOf(processor.switches)
         state <- arbitrary[Boolean]
       } yield Map(
         processor.DynamoDbKeyName -> new AttributeValue(processor.DynamoDbKeyName).withS(switch.name),
@@ -47,10 +47,10 @@ class DynamoDbResultProcessorSpec extends Properties("DynamoDbResultProcessor") 
       val ProcessingResults(switchUpdates, missing) = processor.process(updates)
 
       val missingSwitchKeys =
-        processor.all.map(_.name).toSet.diff(updates.map(_(processor.DynamoDbKeyName).getS).toSet).size
+        processor.switches.map(_.name).toSet.diff(updates.map(_(processor.DynamoDbKeyName).getS).toSet).size
 
       val stateUpdates = updates count { update =>
-        processor.all.exists(switch => switch.name == update(processor.DynamoDbKeyName).getS &&
+        processor.switches.exists(switch => switch.name == update(processor.DynamoDbKeyName).getS &&
           switch.enabled != (update(processor.DynamoDbValueName).getN.toInt == 1))
       }
 
