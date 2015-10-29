@@ -2,7 +2,7 @@ organization := "com.gu"
 
 name := "dynamo-db-switches"
 
-version := "0.3"
+version := "0.2"
 
 scalaVersion := "2.11.7"
 
@@ -11,8 +11,8 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "com.amazonaws" % "aws-java-sdk" % "1.6.3",
-  "org.clapper" % "grizzled-slf4j_2.10" % "1.0.1",
+  "com.amazonaws" % "aws-java-sdk" % "1.10.28",
+  "org.clapper" %% "grizzled-slf4j" % "1.0.2",
   "org.scalacheck" %% "scalacheck" % "1.10.1" % "test"
 )
 
