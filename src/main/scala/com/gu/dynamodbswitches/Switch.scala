@@ -5,5 +5,5 @@ case class Switch(name: String, default: Boolean = false) {
 
   def enabled: Boolean = state
 
-  private[dynamodbswitches] def enabled_=(value: Boolean) = state = value
+  def enabled_=(value: Boolean) = state = value
 }

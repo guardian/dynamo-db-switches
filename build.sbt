@@ -2,7 +2,7 @@ organization := "com.gu"
 
 name := "dynamo-db-switches"
 
-version := "0.2"
+version := "0.3"
 
 scalaVersion := "2.11.7"
 
