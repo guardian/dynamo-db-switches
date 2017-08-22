@@ -1,9 +1,8 @@
 package com.gu.dynamodbswitches
 
 import collection.JavaConverters._
-
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient
-import com.amazonaws.services.dynamodbv2.model.{AttributeValue, ScanRequest}
+import com.amazonaws.services.dynamodbv2.model.{AttributeValue, PutRequest, ScanRequest, WriteRequest}
 import grizzled.slf4j.Logging
 import com.amazonaws.AmazonServiceException
 
@@ -35,6 +34,31 @@ trait Switches extends Logging {
         error(s"Encountered Amazon service error when trying to update switches from DynamoDB: ${exception.getMessage}")
     }
   }
+
+    def updateDynamo(switches : List[Switch]) = {
+    val listWR = switches.map(switch =>
+      new WriteRequest(new PutRequest(Map("name" -> switch.toStringAttribute(), "enabled" -> switch.asAttributeValue(switch.default)).asJava))
+    ).asJava
+
+    try {
+      dynamoDbClient.batchWriteItem(Map(dynamoDbTableName -> listWR).asJava)
+    } catch {
+      case e: Exception => error(e)
+      case _ => warn("Something went wrong")
+    }
+  }
+
+  def getSwitchboardState(): List[Switch] = {
+    dynamoDbClient
+      .scan(new ScanRequest(dynamoDbTableName))
+      .getItems.asScala.toList
+      .map(item => {
+      val scalaItem = item.asScala.toMap
+      Switch(scalaItem("name").getS, scalaItem("enabled").getN == "1")
+    }
+    )
+  }
+
 }
 
 private [dynamodbswitches] case class ProcessingResults(updates: Set[(Switch, Boolean)], missing: Set[Switch])
