@@ -1,34 +1,36 @@
 package com.gu.dynamodbswitches
 
 import collection.JavaConverters._
-
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsyncClient
 import com.amazonaws.services.dynamodbv2.model.{AttributeValue, ScanRequest}
 import grizzled.slf4j.Logging
 import com.amazonaws.AmazonServiceException
+import lib.DynamoDB._
+import scala.concurrent.ExecutionContext
 
 trait Switches extends Logging {
   val all: List[Switch]
 
-  def dynamoDbClient: AmazonDynamoDBClient
+  def dynamoDbClient: AmazonDynamoDBAsyncClient
   val dynamoDbTableName: String = "featureSwitches"
 
   lazy private val processor = DynamoDbResultProcessor(all)
 
   /** Use a scheduler to call this once per minute */
-  def update(): Unit = {
+  def update(implicit executionContext: ExecutionContext): Unit = {
     try {
-      val results = dynamoDbClient.scan(new ScanRequest(dynamoDbTableName)).getItems.asScala.toList.map(_.asScala.toMap)
+      dynamoDbClient.scanFuture(new ScanRequest(dynamoDbTableName)) foreach { scanResult =>
+        val results = scanResult.getItems.asScala.toList.map(_.asScala.toMap)
+        val ProcessingResults(updates, missing) = processor.process(results)
 
-      val ProcessingResults(updates, missing) = processor.process(results)
+        if (missing.nonEmpty) {
+          warn(s"DynamoDB did not return some switches: ${missing.toList.map(_.name).sorted.mkString(", ")}")
+        }
 
-      if (missing.nonEmpty) {
-        warn(s"DynamoDB did not return some switches: ${missing.toList.map(_.name).sorted.mkString(", ")}")
-      }
-
-      for ((switch, newState) <- updates) {
-        info(s"Setting switch ${switch.name} to ${newState.toString}")
-        switch.enabled = newState
+        for ((switch, newState) <- updates) {
+          info(s"Setting switch ${switch.name} to ${newState.toString}")
+          switch.enabled = newState
+        }
       }
     } catch {
       case exception: AmazonServiceException =>
