@@ -51,6 +51,15 @@ if (ApplicationSwitches.mySwitch.enabled) {
 }
 ```
 
+Releasing to maven
+==================
+
+We use teamcity to release to Maven.  Follow these steps to release a new version.
+
+1. push/merge your changes to master
+1. wait for the build to finish successfully.
+1. use the version listed by the build to import into dependent projects
+
 ## Copyright
 
 Copyright 2013 Guardian Media Group. Licensed under Apache 2.0. (See `LICENSE`.)

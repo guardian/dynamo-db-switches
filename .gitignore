@@ -14,4 +14,4 @@ project/plugins/project/
 
 .idea
 .idea_modules
-
+local.*
