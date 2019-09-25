@@ -4,7 +4,7 @@ name := "dynamo-db-switches"
 
 version := "0.4"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.12.8"
 
 resolvers ++= Seq(
   "Sonatype Releases" at "http://oss.sonatype.org/content/repositories/releases"
@@ -12,8 +12,8 @@ resolvers ++= Seq(
 
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk" % "1.10.28",
-  "org.clapper" %% "grizzled-slf4j" % "1.0.2",
-  "org.scalacheck" %% "scalacheck" % "1.10.1" % "test"
+  "org.clapper" %% "grizzled-slf4j" % "1.3.0",
+  "org.scalacheck" %% "scalacheck" % "1.12.6" % "test"
 )
 
 publishTo := {
