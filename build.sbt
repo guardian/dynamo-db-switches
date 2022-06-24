@@ -2,9 +2,9 @@ import sbtrelease.ReleaseStateTransformations._
 
 organization := "com.gu"
 name := "dynamo-db-switches"
-scalaVersion := "2.12.8"
+scalaVersion := "2.11.8"
 libraryDependencies ++= Seq(
-  "com.amazonaws" % "aws-java-sdk" % "1.10.28",
+  "com.amazonaws" % "aws-java-sdk" % "1.12.236",
   "org.clapper" %% "grizzled-slf4j" % "1.3.0",
   "org.scalacheck" %% "scalacheck" % "1.12.6" % "test"
 )

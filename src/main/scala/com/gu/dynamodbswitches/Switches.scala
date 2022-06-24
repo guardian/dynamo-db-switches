@@ -1,7 +1,7 @@
 package com.gu.dynamodbswitches
 
 import collection.JavaConverters._
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
 import com.amazonaws.services.dynamodbv2.model.{AttributeValue, PutRequest, ScanRequest, WriteRequest}
 import grizzled.slf4j.Logging
 import com.amazonaws.AmazonServiceException
@@ -9,7 +9,7 @@ import com.amazonaws.AmazonServiceException
 trait Switches extends Logging {
   val all: List[Switch]
 
-  def dynamoDbClient: AmazonDynamoDBClient
+  def dynamoDbClient: AmazonDynamoDB
   val dynamoDbTableName: String = "featureSwitches"
 
   lazy private val processor = DynamoDbResultProcessor(all)
