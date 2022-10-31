@@ -1,20 +1,20 @@
 package com.gu.dynamodbswitches
 
-import com.amazonaws.services.dynamodbv2.model.AttributeValue
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
 case class Switch(name: String, default: Boolean = false) {
   @volatile private var state: Boolean = default
 
   def enabled: Boolean = state
 
-  def enabled_=(value: Boolean) = state = value
+  def enabled_=(value: Boolean): Unit = state = value
 
-  def toStringAttribute() = {
-    new AttributeValue().withS(this.name)
+  def toStringAttribute(): AttributeValue = {
+    AttributeValue.builder().s(this.name).build()
   }
 
-  def asAttributeValue(b: Boolean) = {
+  def asAttributeValue(b: Boolean): AttributeValue = {
     val str = if(b) "1" else "0"
-    new AttributeValue().withN(str)
+    AttributeValue.builder().n(str).build()
   }
 }
