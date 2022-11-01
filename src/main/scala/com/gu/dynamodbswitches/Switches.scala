@@ -17,7 +17,8 @@ trait Switches extends Logging {
   /** Use a scheduler to call this once per minute */
   def update(): Unit = {
     try {
-      val results = dynamoDbClient.scan(new ScanRequest(dynamoDbTableName)).items().asScala.toList.map(_.asScala.toMap)
+      val scanRequest: ScanRequest = ScanRequest.builder().tableName(dynamoDbTableName).build()
+      val results = dynamoDbClient.scan(scanRequest).items().asScala.toList.map(_.asScala.toMap)
       val ProcessingResults(updates, missing) = processor.process(results)
       if (missing.nonEmpty) {
         warn(s"DynamoDB did not return some switches: ${missing.toList.map(_.name).sorted.mkString(", ")}")
@@ -33,13 +34,14 @@ trait Switches extends Logging {
   }
 
   def updateDynamo(switches : List[Switch]) = {
-    val listWR = switches.map(switch =>
-        new WriteRequest(
-            new PutRequest(Map("name" -> switch.toStringAttribute(),
-                               "enabled" -> switch.asAttributeValue(switch.default)).asJava
-            )
-        )
-      ).asJava
+    val listWR = switches.map(switch => {
+      val putRequest: PutRequest = PutRequest.builder()
+        .item(Map("name" -> switch.toStringAttribute(),
+          "enabled" -> switch.asAttributeValue(switch.default)).asJava)
+        .build()
+      val writeRequest: WriteRequest = WriteRequest.builder().putRequest(putRequest).build()
+      writeRequest
+    }).asJava
     try {
       dynamoDbClient.batchWriteItem(
         BatchWriteItemRequest.builder()
@@ -53,7 +55,7 @@ trait Switches extends Logging {
 
   def getSwitchboardState: List[Switch] = {
     dynamoDbClient
-      .scan(new ScanRequest(dynamoDbTableName))
+      .scan(ScanRequest.builder().tableName(dynamoDbTableName).build())
       .items.asScala.toList
       .map(item => {
         val scalaItem = item.asScala.toMap
