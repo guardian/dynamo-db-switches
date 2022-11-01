@@ -3,12 +3,14 @@ import sbtrelease.ReleaseStateTransformations._
 organization := "com.gu"
 name := "dynamo-db-switches"
 scalaVersion := "2.12.8"
+
 libraryDependencies ++= Seq(
-  "com.amazonaws" % "aws-java-sdk" % "1.10.28",
+  "software.amazon.awssdk" % "dynamodb" % "2.16.25",
   "org.clapper" %% "grizzled-slf4j" % "1.3.0",
   "org.scalacheck" %% "scalacheck" % "1.12.6" % "test"
 )
-sources in doc in Compile := List()
+
+Compile / doc / sources := List()
 releasePublishArtifactsAction := PgpKeys.publishSigned.value
 releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
