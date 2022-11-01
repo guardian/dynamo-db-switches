@@ -5,9 +5,9 @@ name := "dynamo-db-switches"
 scalaVersion := "2.12.8"
 
 libraryDependencies ++= Seq(
-  "software.amazon.awssdk" % "dynamodb" % "2.16.25",
-  "org.clapper" %% "grizzled-slf4j" % "1.3.0",
-  "org.scalacheck" %% "scalacheck" % "1.12.6" % "test"
+  "software.amazon.awssdk" % "dynamodb" % "2.18.6",
+  "org.clapper" %% "grizzled-slf4j" % "1.3.4",
+  "org.scalacheck" %% "scalacheck" % "1.17.0"
 )
 
 Compile / doc / sources := List()
