@@ -6,4 +6,4 @@ scmInfo := Some(ScmInfo(url("https://github.com/guardian/dynamo-db-switches"), "
 developers := List(
   Developer(id="nicl", name="Nic Long", email="", url=url("https://github.com/nicl")),
 )
-publishTo := sonatypePublishTo.value
+publishTo := sonatypePublishToBundle.value

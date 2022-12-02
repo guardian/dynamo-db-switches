@@ -12,7 +12,6 @@ libraryDependencies ++= Seq(
 )
 
 Compile / doc / sources := List()
-publishTo := sonatypePublishToBundle.value
 
 releaseCrossBuild := true // true if you cross-build the project for multiple Scala versions
 releaseProcess := Seq[ReleaseStep](
