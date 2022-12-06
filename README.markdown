@@ -1,4 +1,5 @@
 # Dynamo DB Feature Switches
+[![dynamo-db-switches Scala version support](https://index.scala-lang.org/guardian/dynamo-db-switches/dynamo-db-switches/latest-by-scala-version.svg?platform=jvm)](https://index.scala-lang.org/guardian/dynamo-db-switches/dynamo-db-switches)
 
 Feature switches in Dynamo DB.
 
