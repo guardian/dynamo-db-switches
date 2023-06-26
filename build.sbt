@@ -6,7 +6,9 @@ scalaVersion := "2.13.10"
 crossScalaVersions := Seq(scalaVersion.value, "2.12.17")
 
 libraryDependencies ++= Seq(
-  "software.amazon.awssdk" % "dynamodb" % "2.18.24",
+  "software.amazon.awssdk" % "dynamodb" % "2.20.92",
+  //override version brought in by the dynamodb dep, we can remove this line once there's a newer version of that
+  "io.netty" % "netty-handler" % "4.1.94.Final",
   "org.clapper" %% "grizzled-slf4j" % "1.3.4",
   "org.scalacheck" %% "scalacheck" % "1.17.0" % Test
 )
