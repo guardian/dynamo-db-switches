@@ -24,4 +24,4 @@ jobs:
           cache: sbt
 
       - name: SBT test
-        run: sbt clean compile test
+        run: sbt +clean +compile +test
