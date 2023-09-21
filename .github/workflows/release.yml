@@ -1,0 +1,48 @@
+name: Release
+
+# Only want one release to be running at a time
+concurrency: release
+
+# Build a release every time a PR is merged
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  Release:
+    runs-on: ubuntu-latest
+
+    permissions:
+      # To allow ciReleaseTagNextVersion to push a tag to the repo
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Need full set of tags to be able to calculate the next version.
+          # Currently, that only seems to be possible by fetching the entire history of the repo.
+          fetch-depth: 0
+
+      - uses: actions/setup-java@v3
+        with:
+          java-version: 11
+          distribution: corretto
+          cache: sbt
+
+      - name: Import GPG key
+        # Version pinned so that we know exactly what it does
+        # - don't change this without inspecting the code!
+        uses: crazy-max/ghaction-import-gpg@232931e03ba660f66ea1e4250007329245837ec5
+        with:
+          gpg_private_key: ${{ secrets.PGP_SECRET }}
+          passphrase: ${{ secrets.PGP_PASSPHRASE }}
+
+      # See https://index.scala-lang.org/shiftleftsecurity/sbt-ci-release-early
+      - name: SBT release
+        run: sbt +clean +compile +Test/compile +test ciReleaseTagNextVersion ciReleaseSonatype
+        env:
+          # Name part of user token
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          # Password part of user token
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
