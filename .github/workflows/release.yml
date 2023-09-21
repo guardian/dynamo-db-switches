@@ -1,0 +1,44 @@
+name: Release
+
+concurrency: release
+
+# TODO - only on push to main
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  Release:
+    runs-on: ubuntu-latest
+
+    permissions:
+      # To allow ciReleaseTagNextVersion to push a tag to the repo
+      contents: write
+      # required by configure-aws-credentials step
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v3
+        with:
+          java-version: 11
+          distribution: corretto
+          cache: sbt
+
+      - name: Import GPG key
+        # Version pinned so that we know exactly what the action does
+        # - don't change this without inspecting the code!
+        uses: crazy-max/ghaction-import-gpg@4354fd3a3bc198d7346f7a1eb72909aba00f4609
+        with:
+          gpg_private_key: ${{ secrets.PGP_SECRET }}
+          passphrase: ${{ secrets.PGP_PASSPHRASE }}
+
+      - name: SBT release
+        run: sbt +clean +compile +test ciReleaseTagNextVersion ciReleaseSonatype
+        env:
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
