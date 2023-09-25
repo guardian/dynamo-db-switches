@@ -41,8 +41,11 @@ jobs:
           gpg_private_key: ${{ secrets.PGP_SECRET }}
           passphrase: ${{ secrets.PGP_PASSPHRASE }}
 
+      # See https://index.scala-lang.org/shiftleftsecurity/sbt-ci-release-early
       - name: SBT release
         run: sbt +clean +compile +test ciReleaseTagNextVersion ciReleaseSonatype
         env:
-          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          # name part of user token
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          # password part of user token
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
