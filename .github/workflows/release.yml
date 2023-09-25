@@ -33,13 +33,20 @@ jobs:
           distribution: corretto
           cache: sbt
 
-      - name: Import GPG key
-        # Version pinned so that we know exactly what the action does
-        # - don't change this without inspecting the code!
-        uses: crazy-max/ghaction-import-gpg@4354fd3a3bc198d7346f7a1eb72909aba00f4609
-        with:
-          gpg_private_key: ${{ secrets.PGP_SECRET }}
-          passphrase: ${{ secrets.PGP_PASSPHRASE }}
+#      - name: Import GPG key
+#        # Version pinned so that we know exactly what the action does
+#        # - don't change this without inspecting the code!
+#        uses: crazy-max/ghaction-import-gpg@4354fd3a3bc198d7346f7a1eb72909aba00f4609
+#        with:
+#          gpg_private_key: ${{ secrets.PGP_SECRET }}
+#          passphrase: ${{ secrets.PGP_PASSPHRASE }}
+
+      - run: sudo apt update && sudo apt install -y gnupg
+
+      - run: echo $PGP_SECRET | base64 --decode | echo $PGP_PASSPHRASE | gpg --batch --import
+        env:
+          PGP_SECRET: ${{ secrets.PGP_SECRET }}
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
 
       # See https://index.scala-lang.org/shiftleftsecurity/sbt-ci-release-early
       - name: SBT release
