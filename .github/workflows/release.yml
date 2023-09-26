@@ -3,11 +3,14 @@ name: Release
 # Only want one release to be running at a time
 concurrency: release
 
-# Build a release every time a PR is merged
+# Build a release every time a code-change PR is merged
 on:
   push:
     branches:
       - main
+    paths:
+      - '**.scala'
+      - '**.sbt'
 
 jobs:
   Release:
