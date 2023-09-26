@@ -33,17 +33,11 @@ jobs:
           distribution: corretto
           cache: sbt
 
-#      - name: Import GPG key
-#        # Version pinned so that we know exactly what the action does
-#        # - don't change this without inspecting the code!
-#        uses: crazy-max/ghaction-import-gpg@4354fd3a3bc198d7346f7a1eb72909aba00f4609
-#        with:
-#          gpg_private_key: ${{ secrets.PGP_SECRET }}
-#          passphrase: ${{ secrets.PGP_PASSPHRASE }}
+      - name: Install GPG
+        run: sudo apt update && sudo apt install -y gnupg
 
-      - run: sudo apt update && sudo apt install -y gnupg
-
-      - run: echo $PGP_SECRET | gpg --import --passphrase $PGP_PASSPHRASE --batch
+      - name: Import PGP key
+        run: echo $PGP_SECRET | gpg --batch --import --passphrase $PGP_PASSPHRASE
         env:
           PGP_SECRET: ${{ secrets.PGP_SECRET }}
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
