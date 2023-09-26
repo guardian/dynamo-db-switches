@@ -37,7 +37,7 @@ jobs:
         run: sudo apt update && sudo apt install -y gnupg
 
       - name: Import PGP key
-        run: echo $PGP_SECRET | gpg --batch --import --passphrase $PGP_PASSPHRASE
+        run: echo $PGP_SECRET | base64 --decode | gpg --batch --import --passphrase $PGP_PASSPHRASE
         env:
           PGP_SECRET: ${{ secrets.PGP_SECRET }}
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
