@@ -33,18 +33,17 @@ jobs:
           distribution: corretto
           cache: sbt
 
-      - name: Install GPG
-        run: sudo apt update && sudo apt install -y gnupg
-
-      - name: Import PGP key
-        run: echo $PGP_SECRET | base64 --decode | gpg --batch --import --passphrase $PGP_PASSPHRASE
-        env:
-          PGP_SECRET: ${{ secrets.PGP_SECRET }}
-          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+      - name: Import GPG key
+        # Version pinned so that we know exactly what it does
+        # - don't change this without inspecting the code!
+        uses: crazy-max/ghaction-import-gpg@232931e03ba660f66ea1e4250007329245837ec5
+        with:
+          gpg_private_key: ${{ secrets.PGP_SECRET }}
+          passphrase: ${{ secrets.PGP_PASSPHRASE }}
 
       # See https://index.scala-lang.org/shiftleftsecurity/sbt-ci-release-early
       - name: SBT release
-        run: sbt +clean +compile +test ciReleaseTagNextVersion ciReleaseSonatype
+        run: sbt +clean +compile +Test/compile +test ciReleaseTagNextVersion ciReleaseSonatype
         env:
           # name part of user token
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
