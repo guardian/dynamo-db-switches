@@ -52,6 +52,13 @@ if (ApplicationSwitches.mySwitch.enabled) {
 }
 ```
 
+## Releasing builds
+
+Releases are published to Sonatype OSS and synced to Maven Central.
+This is carried out automatically by the [release GHA workflow](.github/workflows/release.yml) whenever a PR is merged
+to main.
+
+
 ## Copyright
 
 Copyright 2013 Guardian Media Group. Licensed under Apache 2.0. (See `LICENSE`.)
