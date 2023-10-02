@@ -36,7 +36,7 @@ jobs:
       - name: Import GPG key
         # Version pinned so that we know exactly what it does
         # - don't change this without inspecting the code!
-        uses: crazy-max/ghaction-import-gpg@232931e03ba660f66ea1e4250007329245837ec5
+        uses: crazy-max/ghaction-import-gpg@ff3ef461823c67c5f2dcd2085b3d0e46997eb860
         with:
           gpg_private_key: ${{ secrets.PGP_SECRET }}
           passphrase: ${{ secrets.PGP_PASSPHRASE }}
