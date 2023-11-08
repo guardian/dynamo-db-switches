@@ -1,7 +1,7 @@
 organization := "com.gu"
 name := "dynamo-db-switches"
 scalaVersion := "2.13.10"
-crossScalaVersions := Seq(scalaVersion.value, "2.12.17")
+crossScalaVersions := Seq(scalaVersion.value, "2.12.18")
 
 // Minimum versions of transitive dependencies required to avoid vulnerabilities
 val minTransitiveVersions = Seq(
