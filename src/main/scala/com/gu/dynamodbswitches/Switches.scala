@@ -3,7 +3,13 @@ package com.gu.dynamodbswitches
 import collection.JavaConverters._
 import software.amazon.awssdk.core.exception.SdkServiceException
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
-import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, BatchWriteItemRequest, PutRequest, ScanRequest, WriteRequest}
+import software.amazon.awssdk.services.dynamodb.model.{
+  AttributeValue,
+  BatchWriteItemRequest,
+  PutRequest,
+  ScanRequest,
+  WriteRequest
+}
 import grizzled.slf4j.Logging
 
 trait Switches extends Logging {
@@ -21,7 +27,9 @@ trait Switches extends Logging {
       val results = dynamoDbClient.scan(scanRequest).items().asScala.toList.map(_.asScala.toMap)
       val ProcessingResults(updates, missing) = processor.process(results)
       if (missing.nonEmpty) {
-        warn(s"DynamoDB did not return some switches: ${missing.toList.map(_.name).sorted.mkString(", ")}")
+        warn(
+          s"DynamoDB did not return some switches: ${missing.toList.map(_.name).sorted.mkString(", ")}"
+        )
       }
       for ((switch, newState) <- updates) {
         info(s"Setting switch ${switch.name} to ${newState.toString}")
@@ -29,45 +37,50 @@ trait Switches extends Logging {
       }
     } catch {
       case exception: SdkServiceException =>
-        error(s"Encountered Amazon service error when trying to update switches from DynamoDB: ${exception.getMessage}")
+        error(
+          s"Encountered Amazon service error when trying to update switches from DynamoDB: ${exception.getMessage}"
+        )
     }
   }
 
-  def updateDynamo(switches : List[Switch]) = {
-    val listWR = switches.map(switch => {
-      val putRequest: PutRequest = PutRequest.builder()
-        .item(Map("name" -> switch.toStringAttribute(),
-          "enabled" -> switch.asAttributeValue(switch.default)).asJava)
-        .build()
-      val writeRequest: WriteRequest = WriteRequest.builder().putRequest(putRequest).build()
-      writeRequest
-    }).asJava
+  def updateDynamo(switches: List[Switchable]) = {
+    val listWR = switches
+      .map(switch => {
+        switch.writeRequest
+      })
+      .asJava
     try {
       dynamoDbClient.batchWriteItem(
-        BatchWriteItemRequest.builder()
+        BatchWriteItemRequest
+          .builder()
           .requestItems(Map(dynamoDbTableName -> listWR).asJava)
-          .build())
+          .build()
+      )
     } catch {
       case e: Exception => error(e)
-      case _ => warn("Something went wrong")
+      case _            => warn("Something went wrong")
     }
   }
 
   def getSwitchboardState: List[Switch] = {
     dynamoDbClient
       .scan(ScanRequest.builder().tableName(dynamoDbTableName).build())
-      .items.asScala.toList
+      .items
+      .asScala
+      .toList
       .map(item => {
         val scalaItem = item.asScala.toMap
         Switch(scalaItem("name").s(), scalaItem("enabled").n() == "1")
-      }
-    )
+      })
   }
 }
 
-private [dynamodbswitches] case class ProcessingResults(updates: Set[(Switch, Boolean)], missing: Set[Switch])
+private[dynamodbswitches] case class ProcessingResults(
+    updates: Set[(Switch, Boolean)],
+    missing: Set[Switch]
+)
 
-private [dynamodbswitches] case class DynamoDbResultProcessor(switches: List[Switch]) {
+private[dynamodbswitches] case class DynamoDbResultProcessor(switches: List[Switch]) {
   val DynamoDbKeyName: String = "name"
   val DynamoDbValueName: String = "enabled"
 
@@ -76,18 +89,22 @@ private [dynamodbswitches] case class DynamoDbResultProcessor(switches: List[Swi
 
   def process(updates: List[Map[String, AttributeValue]]): ProcessingResults = {
     val switchesAndStates = (updates flatMap { attributeMap =>
-      for {
-        keyAttribute <- attributeMap.get(DynamoDbKeyName)
-        key <- Option(keyAttribute.s())
-        enabledAttribute <- attributeMap.get(DynamoDbValueName)
-        enabled <- Option(enabledAttribute.n()).map(_.toInt == 1)
-        switch <- byName.get(key)
-      } yield switch -> enabled
+      f(attributeMap)
     }).toSet
 
     ProcessingResults(
       switchesAndStates filter { case (switch, state) => switch.enabled != state },
       switchSet.diff(switchesAndStates.map(_._1).toSet)
     )
+  }
+
+  private def f(attributeMap: Map[String, AttributeValue]) = {
+    for {
+      keyAttribute <- attributeMap.get(DynamoDbKeyName)
+      key <- Option(keyAttribute.s())
+      enabledAttribute <- attributeMap.get(DynamoDbValueName)
+      enabled <- Option(enabledAttribute.n()).map(_.toInt == 1)
+      switch <- byName.get(key)
+    } yield switch -> enabled
   }
 }
