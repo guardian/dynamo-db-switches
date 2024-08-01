@@ -11,7 +11,7 @@ val minTransitiveVersions = Seq(
 libraryDependencies ++= Seq(
   "software.amazon.awssdk" % "dynamodb" % "2.20.162",
   "org.clapper" %% "grizzled-slf4j" % "1.3.4",
-  "org.scalacheck" %% "scalacheck" % "1.17.0" % Test
+  "org.scalacheck" %% "scalacheck" % "1.17.1" % Test
 ) ++ minTransitiveVersions
 
 Compile / doc / sources := List()
