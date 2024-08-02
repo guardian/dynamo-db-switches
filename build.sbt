@@ -5,13 +5,13 @@ crossScalaVersions := Seq(scalaVersion.value, "2.12.19")
 
 // Minimum versions of transitive dependencies required to avoid vulnerabilities
 val minTransitiveVersions = Seq(
-  "io.netty" % "netty-codec-http2" % "4.1.100.Final",
+  "io.netty" % "netty-codec-http2" % "4.1.112.Final",
 )
 
 libraryDependencies ++= Seq(
   "software.amazon.awssdk" % "dynamodb" % "2.20.162",
   "org.clapper" %% "grizzled-slf4j" % "1.3.4",
-  "org.scalacheck" %% "scalacheck" % "1.17.0" % Test
+  "org.scalacheck" %% "scalacheck" % "1.17.1" % Test
 ) ++ minTransitiveVersions
 
 Compile / doc / sources := List()
