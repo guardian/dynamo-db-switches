@@ -17,11 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version: 11
-          distribution: corretto
-          cache: sbt
+      - uses: guardian/setup-scala@v1
 
       - name: SBT test
         run: sbt +clean +compile +test
