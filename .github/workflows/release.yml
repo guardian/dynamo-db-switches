@@ -27,11 +27,7 @@ jobs:
           # Currently, that only seems to be possible by fetching the entire history of the repo.
           fetch-depth: 0
 
-      - uses: actions/setup-java@v4
-        with:
-          java-version: 11
-          distribution: corretto
-          cache: sbt
+      - uses: guardian/setup-scala@v1
 
       - name: Import GPG key
         # Version pinned so that we know exactly what it does
