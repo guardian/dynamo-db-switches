@@ -3,7 +3,7 @@ name := "dynamo-db-switches"
 scalaVersion := "2.13.14"
 crossScalaVersions := Seq(scalaVersion.value, "2.12.19")
 
-// Minimum versions of transitive dependencies required to avoid vulnerabilities
+// minimum versions of transitive dependencies required to avoid vulnerabilities
 val minTransitiveVersions = Seq(
   "io.netty" % "netty-codec-http2" % "4.1.118.Final",
 )
