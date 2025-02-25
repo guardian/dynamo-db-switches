@@ -5,7 +5,7 @@ crossScalaVersions := Seq(scalaVersion.value, "2.12.19")
 
 // Minimum versions of transitive dependencies required to avoid vulnerabilities
 val minTransitiveVersions = Seq(
-  "io.netty" % "netty-codec-http2" % "4.1.100.Final",
+  "io.netty" % "netty-codec-http2" % "4.1.118.Final",
 )
 
 libraryDependencies ++= Seq(
