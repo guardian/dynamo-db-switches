@@ -13,7 +13,7 @@ trait Switches extends Logging {
   val dynamoDbTableName: String = "featureSwitches"
 
   lazy private val processor = DynamoDbResultProcessor(all)
-
+  //just a test to trigger the release process in a branch!!
   /** Use a scheduler to call this once per minute */
   def update(): Unit = {
     try {
