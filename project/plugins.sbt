@@ -1,2 +1,4 @@
 // Used by release workflow (.github/workflows/release.yml)
-addSbtPlugin("io.shiftleft" % "sbt-ci-release-early" % "2.0.45")
+addSbtPlugin("com.github.sbt" % "sbt-release" % "1.4.0")
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.12.2")
+addSbtPlugin("ch.epfl.scala" % "sbt-version-policy" % "3.2.1")
