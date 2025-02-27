@@ -24,7 +24,7 @@ releaseProcess := Seq[ReleaseStep](
 
 // minimum versions of transitive dependencies required to avoid vulnerabilities
 val minTransitiveVersions = Seq(
-  "io.netty" % "netty-codec-http2" % "4.1.118.Final",
+  "io.netty" % "netty-codec-http2" % "4.1.119.Final",
 )
 
 libraryDependencies ++= Seq(
