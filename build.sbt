@@ -8,7 +8,7 @@ scalaVersion := "2.13.14"
 scalacOptions ++= Seq("-release:11")
 crossScalaVersions := Seq(scalaVersion.value, "2.12.19")
 
-//releaseVersion := ReleaseVersion.fromAggregatedAssessedCompatibilityWithLatestRelease().value
+releaseVersion := ReleaseVersion.fromAggregatedAssessedCompatibilityWithLatestRelease().value
 
 releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
