@@ -22,15 +22,11 @@ releaseProcess := Seq[ReleaseStep](
   commitNextVersion
 )
 
-// minimum versions of transitive dependencies required to avoid vulnerabilities
-val minTransitiveVersions = Seq(
-  "io.netty" % "netty-codec-http2" % "4.1.118.Final",
-)
 
 libraryDependencies ++= Seq(
-  "software.amazon.awssdk" % "dynamodb" % "2.20.162",
+  "software.amazon.awssdk" % "dynamodb" % "2.33.9",
   "org.clapper" %% "grizzled-slf4j" % "1.3.4",
   "org.scalacheck" %% "scalacheck" % "1.17.0" % Test
-) ++ minTransitiveVersions
+)
 
 Compile / doc / sources := List()
