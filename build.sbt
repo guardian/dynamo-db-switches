@@ -4,9 +4,9 @@ import sbtversionpolicy.withsbtrelease.ReleaseVersion
 organization := "com.gu"
 name := "dynamo-db-switches"
 licenses := Seq(License.Apache2)
-scalaVersion := "2.13.14"
+scalaVersion := "2.13.16"
 scalacOptions ++= Seq("-release:11")
-crossScalaVersions := Seq(scalaVersion.value, "2.12.19")
+crossScalaVersions := Seq(scalaVersion.value, "2.12.20")
 
 releaseVersion := ReleaseVersion.fromAggregatedAssessedCompatibilityWithLatestRelease().value
 
@@ -26,7 +26,7 @@ releaseProcess := Seq[ReleaseStep](
 libraryDependencies ++= Seq(
   "software.amazon.awssdk" % "dynamodb" % "2.33.9",
   "org.clapper" %% "grizzled-slf4j" % "1.3.4",
-  "org.scalacheck" %% "scalacheck" % "1.17.0" % Test
+  "org.scalacheck" %% "scalacheck" % "1.17.1" % Test
 )
 
 Compile / doc / sources := List()
