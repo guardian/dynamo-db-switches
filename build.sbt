@@ -26,7 +26,7 @@ releaseProcess := Seq[ReleaseStep](
 libraryDependencies ++= Seq(
   "software.amazon.awssdk" % "dynamodb" % "2.33.9",
   "org.clapper" %% "grizzled-slf4j" % "1.3.4",
-  "org.scalacheck" %% "scalacheck" % "1.17.0" % Test
+  "org.scalacheck" %% "scalacheck" % "1.17.1" % Test
 )
 
 Compile / doc / sources := List()
