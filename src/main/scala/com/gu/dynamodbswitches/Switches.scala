@@ -49,7 +49,7 @@ trait Switches extends Logging {
           .build())
     } catch {
       case e: Exception => error(e)
-      case _ => warn("Something went wrong")
+      case _: Throwable => warn("Something went wrong")
     }
   }
 
